@@ -129,7 +129,7 @@ class Mongo implements AuthorizationCodeInterface,
     /* AccessTokenInterface */
     public function getAccessToken($access_token)
     {
-        $token = $this->collection('access_token_table')->findOne(array('access_token' => $access_token));
+        $token = $this->collection('access_token_table')->findOne(array('_id' => $access_token));
 
         return is_null($token) ? false : $token;
     }
@@ -139,7 +139,7 @@ class Mongo implements AuthorizationCodeInterface,
         // if it exists, update it.
         if ($this->getAccessToken($access_token)) {
             $this->collection('access_token_table')->update(
-                array('access_token' => $access_token),
+                array('_id' => $access_token),
                 array('$set' => array(
                     'client_id' => $client_id,
                     'expires' => $expires,
@@ -150,7 +150,7 @@ class Mongo implements AuthorizationCodeInterface,
         } else {
             $this->collection('access_token_table')->insert(
                 array(
-                    'access_token' => $access_token,
+                    '_id' => $access_token,
                     'client_id' => $client_id,
                     'expires' => $expires,
                     'user_id' => $user_id,
@@ -166,7 +166,7 @@ class Mongo implements AuthorizationCodeInterface,
     /* AuthorizationCodeInterface */
     public function getAuthorizationCode($code)
     {
-        $code = $this->collection('code_table')->findOne(array('authorization_code' => $code));
+        $code = $this->collection('code_table')->findOne(array('_id' => $code));
 
         return is_null($code) ? false : $code;
     }
@@ -176,7 +176,7 @@ class Mongo implements AuthorizationCodeInterface,
         // if it exists, update it.
         if ($this->getAuthorizationCode($code)) {
             $this->collection('code_table')->update(
-                array('authorization_code' => $code),
+                array('_id' => $code),
                 array('$set' => array(
                     'client_id' => $client_id,
                     'user_id' => $user_id,
@@ -188,7 +188,7 @@ class Mongo implements AuthorizationCodeInterface,
         } else {
             $this->collection('code_table')->insert(
                 array(
-                    'authorization_code' => $code,
+                    '_id' => $code,
                     'client_id' => $client_id,
                     'user_id' => $user_id,
                     'redirect_uri' => $redirect_uri,
@@ -203,7 +203,7 @@ class Mongo implements AuthorizationCodeInterface,
 
     public function expireAuthorizationCode($code)
     {
-        $this->collection('code_table')->remove(array('authorization_code' => $code));
+        $this->collection('code_table')->remove(array('_id' => $code));
 
         return true;
     }
