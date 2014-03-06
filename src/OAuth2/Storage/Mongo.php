@@ -142,7 +142,6 @@ class Mongo implements AuthorizationCodeInterface,
                 array('_id' => $access_token),
                 array('$set' => array(
                     'client_id' => $client_id,
-                    'expires' => $expires,
                     'user_id' => $user_id,
                     'scope' => $scope
                 ))
@@ -152,7 +151,6 @@ class Mongo implements AuthorizationCodeInterface,
                 array(
                     '_id' => $access_token,
                     'client_id' => $client_id,
-                    'expires' => $expires,
                     'user_id' => $user_id,
                     'scope' => $scope
                 )

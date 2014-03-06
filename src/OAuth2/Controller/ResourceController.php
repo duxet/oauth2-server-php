@@ -80,10 +80,8 @@ class ResourceController implements ResourceControllerInterface
             // Check token expiration (expires is a mandatory paramter)
             if (!$token = $this->tokenStorage->getAccessToken($token_param)) {
                 $response->setError(401, 'invalid_token', 'The access token provided is invalid');
-            } elseif (!isset($token["expires"]) || !isset($token["client_id"])) {
-                $response->setError(401, 'invalid_token', 'Malformed token (missing "expires" or "client_id")');
-            } elseif (time() > $token["expires"]) {
-                $response->setError(401, 'invalid_token', 'The access token provided has expired');
+            } elseif (!isset($token["client_id"])) {
+                $response->setError(401, 'invalid_token', 'Malformed token (missing "client_id")');
             } else {
                 return $token;
             }
