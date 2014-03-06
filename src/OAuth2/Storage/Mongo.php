@@ -60,7 +60,7 @@ class Mongo implements AuthorizationCodeInterface,
     /* ClientCredentialsInterface */
     public function checkClientCredentials($client_id, $client_secret = null)
     {
-        if ($result = $this->collection('client_table')->findOne(array('client_id' => $client_id))) {
+        if ($result = $this->collection('client_table')->findOne(array('_id' => $client_id))) {
             return $result['client_secret'] == $client_secret;
         }
 
@@ -69,7 +69,7 @@ class Mongo implements AuthorizationCodeInterface,
 
     public function isPublicClient($client_id)
     {
-        if (!$result = $this->collection('client_table')->findOne(array('client_id' => $client_id))) {
+        if (!$result = $this->collection('client_table')->findOne(array('_id' => $client_id))) {
             return false;
         }
 
@@ -79,7 +79,7 @@ class Mongo implements AuthorizationCodeInterface,
     /* ClientInterface */
     public function getClientDetails($client_id)
     {
-        $result = $this->collection('client_table')->findOne(array('client_id' => $client_id));
+        $result = $this->collection('client_table')->findOne(array('_id' => $client_id));
 
         return is_null($result) ? false : $result;
     }
@@ -88,7 +88,7 @@ class Mongo implements AuthorizationCodeInterface,
     {
         if ($this->getClientDetails($client_id)) {
             $this->collection('client_table')->update(
-                array('client_id' => $client_id),
+                array('_id' => $client_id),
                 array('$set' => array(
                     'client_secret' => $client_secret,
                     'redirect_uri'  => $redirect_uri,
@@ -100,7 +100,7 @@ class Mongo implements AuthorizationCodeInterface,
         } else {
             $this->collection('client_table')->insert(
                 array(
-                    'client_id'     => $client_id,
+                    '_id'     => $client_id,
                     'client_secret' => $client_secret,
                     'redirect_uri'  => $redirect_uri,
                     'grant_types'   => $grant_types,
